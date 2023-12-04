@@ -7,6 +7,7 @@
 using namespace std;
 //viet ham ho tro
 
+
 void gotoXY(int x, int y)
 {
 	HANDLE hConsoleOutput;
