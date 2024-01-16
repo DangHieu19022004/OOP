@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ class vehicles{
         vehicles(int TocDoTC){
             this->TocDoTC = TocDoTC;
         }
-        virtual int maxSpeed() const = 0;
+        virtual double maxSpeed() const = 0;
 };
 
 class Ferrari : public vehicles{
@@ -25,7 +26,7 @@ class Ferrari : public vehicles{
             this->MauSac = MauSac;
             this->hesoTocDo = hesoTocDo;
         };
-        int maxSpeed() const{
+        double maxSpeed() const {
             return TocDoTC * hesoTocDo;
         }
         void input(){
@@ -37,35 +38,36 @@ class Ferrari : public vehicles{
         }
         void output(){
             cout << "Mau sac: " << MauSac << endl;
-            cout << "Toc do toi da: " << maxSpeed() << endl;
+            cout << "Toc do toi da: " << fixed << setprecision(2) << maxSpeed() << endl;
         }
-        bool operator > (Ferrari &a){
-            return this->maxSpeed() > a.maxSpeed();
-        }
+		friend bool operator > (Ferrari a, Ferrari b){
+			return a.maxSpeed() > b.maxSpeed();
+		}
 };
 
 int main(){
-    vector<Ferrari*> a;
-    int tocdotc;
-    cout << "Nhap toc do tieu chuan: ";
-    cin >> tocdotc;
-    cin.ignore();
-    int n;
-    cout << "Nhap so luong xe ferrari: ";
-    cin >> n;
-    cin.ignore();
-    for(int i = 0; i < n; i++){
-        cout << "Nhap thong tin xe thu " << i + 1 << endl;
-        Ferrari *x = new Ferrari(tocdotc, "", 0);
-        x->input();
-        a.push_back(x);
-    }
-    Ferrari *max = a[0];
-    for(int i = 0; i < n; i++){
-        if(*a[i] > *max){
-            max = a[i];
-        }
-    }
-    cout << "Xe co toc do lon nhat la: " << endl;
-    max->output();
+	vector<Ferrari*> dsVehicles;
+	int N; 
+	cout << "Nhap so xe Ferrari: ";
+	cin >> N;
+	cin.ignore();
+	for(int i=0; i<N; i++){
+		cout << endl << "Nhap thong tin xe Ferrari thu " << i+1 << ": " << endl;
+		Ferrari *ferr = new Ferrari();
+		ferr->input();
+		dsVehicles.push_back(ferr);
+	}
+	cout << endl << endl << "Danh sach ferrari: " << endl;
+	for(int i=0; i<N; i++){
+		dsVehicles[i]->output();
+	}
+	cout << endl << endl << "xe Ferrari co toc do lon nhat:" << endl;
+	for(int i=0; i<N-1; i++){
+		for(int j=i+1; j<N; j++){
+			if(*dsVehicles[i] > *dsVehicles[j]){
+				swap(dsVehicles[i], dsVehicles[j]);
+			}
+		}
+	}
+	dsVehicles.back()->output();
 }

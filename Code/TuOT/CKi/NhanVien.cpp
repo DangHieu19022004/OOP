@@ -1,8 +1,8 @@
 #include <iostream>
-#include <string>
 #include <vector>
-#include <fstream>
+#include <string>
 #include <iomanip>
+#include <fstream>
 
 using namespace std;
 
@@ -13,12 +13,15 @@ class NhanVien{
 		string GioiTinh;
 		string DiaChi;
 	public:
-		NhanVien(){};
+		NhanVien(){}
 		NhanVien(string HoTen, int NamSinh, string GioiTinh, string DiaChi){
 			this->HoTen = HoTen;
 			this->NamSinh = NamSinh;
 			this->GioiTinh = GioiTinh;
 			this->DiaChi = DiaChi;
+		}
+		string getHoTen(){
+			return HoTen;
 		}
 		friend istream& operator>>(istream& is, NhanVien& NV){
 			cout << "Nhap ho ten: ";
@@ -26,14 +29,14 @@ class NhanVien{
 			cout << "Nhap nam sinh: ";
 			is >> NV.NamSinh;
 			is.ignore();
-			cout << "Gioi tinh: ";
+			cout << "Nhap gioi tinh: ";
 			getline(is, NV.GioiTinh);
-			cout << "Dia chi: ";
+			cout << "Nhap dia chi: ";
 			getline(is, NV.DiaChi);
 			return is;
 		}
 		friend ostream& operator<<(ostream& os, NhanVien NV){
-			os << "Ten nhan vien: " << NV.HoTen << endl;
+			os << "Ho ten: " << NV.HoTen << endl;
 			os << "Nam sinh: " << NV.NamSinh << endl;
 			os << "Gioi tinh: " << NV.GioiTinh << endl;
 			os << "Dia chi: " << NV.DiaChi << endl;
@@ -46,29 +49,24 @@ class CongNhan : public NhanVien{
 		double TienLuong;
 		string CongViec;
 	public:
-		CongNhan(){};
-		CongNhan(string HoTen, int NamSinh, string GioiTinh, string DiaChi, double TienLuong, string CongViec){
-			this->HoTen = HoTen;
-			this->NamSinh = NamSinh;
-			this->GioiTinh = GioiTinh;
-			this->DiaChi = DiaChi;
-			this->TienLuong = TienLuong;
-			this->CongViec = CongViec;
-		}
-		string getTen(){
-			return this->HoTen;
-		}
+		CongNhan(){}
+		CongNhan(string HoTen, int NamSinh, string GioiTinh, string DiaChi, double TienLuong, string CongViec)
+			: NhanVien(HoTen, NamSinh, GioiTinh, DiaChi){
+				this->TienLuong = TienLuong;
+				this->CongViec = CongViec;
+			}
+		
 		friend istream& operator>>(istream& is, CongNhan& CN){
 			cout << "Nhap ho ten: ";
 			getline(is, CN.HoTen);
 			cout << "Nhap nam sinh: ";
 			is >> CN.NamSinh;
 			is.ignore();
-			cout << "Gioi tinh: ";
+			cout << "Nhap gioi tinh: ";
 			getline(is, CN.GioiTinh);
-			cout << "Dia chi: ";
+			cout << "Nhap dia chi: ";
 			getline(is, CN.DiaChi);
-			cout << "Nhap Luong: ";
+			cout << "Nhap tien luong: ";
 			is >> CN.TienLuong;
 			is.ignore();
 			cout << "Nhap cong viec: ";
@@ -76,64 +74,44 @@ class CongNhan : public NhanVien{
 			return is;
 		}
 		friend ostream& operator<<(ostream& os, CongNhan CN){
-			os << left << setw(30) << CN.HoTen << setw(10) << CN.NamSinh << setw(10) << CN.GioiTinh << setw(30) << CN.DiaChi << setw(20) << CN.TienLuong << setw(30) << CN.CongViec << endl;
+			os << "Ho ten: " << CN.HoTen << endl;
+			os << "Nam sinh: " << CN.NamSinh << endl;
+			os << "Gioi tinh: " << CN.GioiTinh << endl;
+			os << "Dia chi: " << CN.DiaChi << endl;
+			os << "Tien luong: " << CN.TienLuong << endl;
+			os << "Cong viec: " << CN.CongViec << endl;
 			return os;
 		}
 };
 
-int main() {
+int main(){
 	vector<CongNhan*> dsCongNhan;
 	int N;
 	do{
-		cout << "Nhap so luong cong nhan: ";
+		cout << "Nhap so cong nhan: ";
 		cin >> N;
 		cin.ignore();
-		if(N <= 0 || N >= 10){
-			cout << "Nhap sai, vui long nhap lai!" << endl;
+		if(N<=0 || N>=10){
+			cout << "Nhap sai, vui long nhap lai!!!" << endl;
 		}
-		else{
-			break;
-		}
-	}while(N <= 0 || N >= 10);
-	
+	}while(N<=0 || N>=10);
 	for(int i=0; i<N; i++){
-		cout << "Nhap thong tin cong nhan thu " << i+1 << ": "<<endl;
-		CongNhan *p = new CongNhan();
-		cin >> *p;
-		dsCongNhan.push_back(p);
+		cout << endl << "Nhap thong tin cong nhan thu " << i+1 << ": " << endl;
+   		CongNhan *congNhan = new CongNhan();
+   		cin >> *congNhan;
+    	dsCongNhan.push_back(congNhan);
 	}
-	
-	cout << endl << right << setw(50) << "Danh sach vua nhap" << endl;
-	cout << endl << left << setfill('-') << setw(130) << "-" << setfill(' ') << endl;
-	cout << left << setw(30) << "Ho ten" << setw(10) << "Nam sinh" << setw(10) << "Gioi tinh" << setw(30) << "Dia chi" << setw(20) << "Tien luong" << setw(30) << "Cong viec" << endl;
-	cout << left << setfill('-') << setw(130) << "-" << setfill(' ') << endl;
+	cout << endl << endl << "Danh sach cong nhan: " << endl;
 	for(int i=0; i<N; i++){
+		cout << endl;
 		cout << *dsCongNhan[i];
 	}
-	string ten;
-	bool check=false;
-	do{
-		cout << endl << "Nhap ten cong nhan can tim(Nhap x de thoat): ";
-		getline(cin, ten);
-		for(int i=0; i<N; i++){
-			if(ten==dsCongNhan[i]->getTen()){
-				cout << endl << left << setfill('-') << setw(130) << "-" << setfill(' ') << endl;
-				cout << left << setw(30) << "Ho ten" << setw(10) << "Nam sinh" << setw(10) << "Gioi tinh" << setw(30) << "Dia chi" << setw(20) << "Tien luong" << setw(30) << "Cong viec" << endl;
-				cout << left << setfill('-') << setw(130) << "-" << setfill(' ') << endl;
-				cout << *dsCongNhan[i];					
-				check=true;
-				break;
-			}
-			else{
-				check=false;
-			}
+	string find;
+	cout << "Nhap ten tim kiem: ";
+	getline(cin, find);
+	for(int i=0; i<N; i++){
+		if(find==dsCongNhan[i]->getHoTen()){
+			cout << *dsCongNhan[i];
 		}
-		if(check==false){
-			if(ten=="x" && ten=="X"){
-				cout << "Thoat tim kiem.";
-			}
-			cout<<"Khong tim thay nhan vien " << ten << " trong danh sach cong nhan.";
-		}
-	}while(ten!="x" && ten!="X");
-	return 0;
+	}
 }
